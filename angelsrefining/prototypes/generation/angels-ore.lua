@@ -167,16 +167,16 @@ angelsmods.functions.add_resource("make", {
   },
 })
 
-angelsmods.functions.add_resource("update", {
-  name = "coal",
-  order = "b-aa",
-  autoplace = {
-    starting_area = true,
-    base_density = 8,
-    regular_rq_factor_multiplier = 1.0,
-    starting_rq_factor_multiplier = 1.1,
-  },
-})
+-- angelsmods.functions.add_resource("update", {
+--   name = "coal",
+--   order = "b-aa",
+--   autoplace = {
+--     starting_area = true,
+--     base_density = 8,
+--     regular_rq_factor_multiplier = 1.0,
+--     starting_rq_factor_multiplier = 1.1,
+--   },
+-- })
 
 angelsmods.functions.add_resource("update", {
   name = "crude-oil",

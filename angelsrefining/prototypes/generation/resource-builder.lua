@@ -696,7 +696,15 @@ end
 
 --CREATE RESOURCE FROM STORE
 function angelsmods.functions.make_resource()
+  log("################ make_resource called ##################")
+  --log(serpent.block(angelsmods.functions.store.update))
+  --log(serpent.block(angelsmods.functions.store.make))
   for r, input in pairs(angelsmods.functions.store.make) do
+
+    if input.name == "infinite-coal" then
+      log("Making resource " .. input.name)
+      log(serpent.block(input))
+    end
     local ret_table = {
       type = "resource",
       flags = { "placeable-neutral" },
@@ -707,7 +715,7 @@ function angelsmods.functions.make_resource()
     }
     local autoplace_ret_table = {
       name = input.name,
-      order = input.order,
+      order = input.autoplace.order or input.order,
       base_density = input.autoplace.base_density,
       has_starting_area_placement = input.autoplace.starting_area,
       resource_index = input.autoplace.resource_index,
@@ -719,11 +727,13 @@ function angelsmods.functions.make_resource()
       random_spot_size_maximum = input.autoplace.random_spot_size_maximum,
       additional_richness = input.autoplace.additional_richness,
       richness_post_multiplier = input.autoplace.richness_post_multiplier or nil,
-      -- richness_post_multiplier = 0.1 --Maybe make that an option?
+      --autoplace_set_name = "angel"
     }
+
     if not data.raw.resource[input.name] then
       --Setup autoplace (base game)
       resource_autoplace.initialize_patch_set(input.name, input.autoplace.starting_area)
+
       --Create Autopace for the resource
       make_resautoplace(input)
       generate_presets(input.name)
@@ -735,9 +745,11 @@ function angelsmods.functions.make_resource()
       if input.type == "item" then
         if input.get and data.raw.particle and data.raw.particle[input.get .. "-particle"] then
           input.particle = input.get .. "-particle"
+          log("Using existing particle " .. input.particle)
         else
           make_particle(input)
           input.particle = input.name .. "-particle"
+          log("Created new particle " .. input.particle)
         end
       else
         input.particle = nil
@@ -808,7 +820,26 @@ function angelsmods.functions.make_resource()
       --Get map_color and icon from the regular resource
       if input.get then
         input.map_color = data.raw.resource[input.get].map_color
-        autoplace_ret_table.patch_set_name = input.get
+        -- TMP: Turn the infinite coal to pink on the map
+        if input.get == "coal" then
+          input.map_color = {
+            r = 1.0,
+            g = 0.2,
+            b = 1.0
+          }
+        end
+        --autoplace_ret_table.autoplace_control_name=input.get
+
+        -- Having the same as the vanilla patch causes collisions on name expressions here!
+        -- It seems we must set the same as the vanilla resource to get noise expressions to overlap though!
+        autoplace_ret_table.patch_set_name = input.name
+
+        -- WORKAROUND: Fix up the indices to get identical spot noise generation
+        -- See https://github.com/Arch666Angel/mods/issues/1046 for more
+        if input.workaround_fixup_rng_seed then
+          autoplace_sets.default.regular.patch_set_indexes[input.name] = autoplace_sets.default.regular.patch_set_indexes[input.get]
+        end
+
         if data.raw.resource[input.get] then
           if data.raw.resource[input.get].icon_size then
             input.icon_size = data.raw.resource[input.get].icon_size
@@ -870,7 +901,21 @@ function angelsmods.functions.make_resource()
       ret_table.max_effect_alpha = input.gfx_alpha_max
       ret_table.map_color = input.map_color
       ret_table.map_grid = input.map_grid
+      if input.name == "infinite-coal" then --GOOD
+        log("good\n" .. data.raw["noise-expression"]["default-coal-patches"].expression)
+      end
+
+      if input.name == "infinite-coal" then
+        log("autoplace_ret_table:" .. serpent.block(autoplace_ret_table))
+      end
       ret_table.autoplace = resource_autoplace.resource_autoplace_settings(autoplace_ret_table)
+
+      if input.name == "infinite-coal" then
+        log("ret_table:" .. serpent.block(ret_table))
+      end
+      if input.name == "infinite-coal" then -- BAD
+        log("bad\n" .. data.raw["noise-expression"]["default-coal-patches"].expression)
+      end
       data:extend({ ret_table })
     end
   end

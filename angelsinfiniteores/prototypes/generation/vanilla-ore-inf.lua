@@ -1,14 +1,14 @@
-angelsmods.functions.add_resource("update", {
-  name = "coal",
-  order = "b-aa",
-  autoplace = {
-    starting_area = true,
-    --resource_index = 0,
-    base_density = 8,
-    regular_rq_factor_multiplier = 1.0,
-    starting_rq_factor_multiplier = 1.1,
-  },
-})
+-- angelsmods.functions.add_resource("update", {
+--   name = "coal",
+--   order = "b-aa",
+--   autoplace = {
+--     starting_area = true,
+--     --resource_index = 0,
+--     base_density = 8,
+--     regular_rq_factor_multiplier = 1.0,
+--     starting_rq_factor_multiplier = 1.1,
+--   },
+-- })
 
 angelsmods.functions.add_resource("make", {
   name = "infinite-coal",
@@ -31,14 +31,33 @@ angelsmods.functions.add_resource("make", {
   output_max = 1,
   output_probability = angelsmods.ores.loweryield,
   --icon = "__base__/graphics/icons/coal.png",
+
+  workaround_fixup_rng_seed = true,
   autoplace = {
     starting_area = false,
+
+    order = "a", -- try ordering before coal and see if that changes stuff?
+    --order = "ba", -- try ordering after coal
+
     --resource_index = 0,
-    base_density = 5,
-    regular_rq_factor_multiplier = 0.3,
-    starting_rq_factor_multiplier = 0.5,
+    base_density = 5,--5, -- Vanilla coal: 8
+    regular_rq_factor_multiplier = 0.3,--0.3, -- Vanilla coal: 1.0
+    --starting_rq_factor_multiplier = 1.1,
+
+    random_spot_size_minimum = 0.25,       -- Default: 0.25
+    random_spot_size_maximum = 2,          -- Default: 2
+    --regular_blob_amplitude_multiplier = 1, -- Default: 1
+
   },
 })
+
+-- local expression = data.raw["noise-expression"]["default-coal-patches"]
+-- if expression.local_expressions == nil then
+--   expression.local_expressions = {}
+-- end
+-- expression.local_expressions["old_expression"] = expression.expression
+-- expression.local_expressions["infinite_expression"] = "default-infinite-coal-patches"
+-- expression.expression = "old_expression - infinite_expression"
 
 if angelsmods.ores.disable_ore_override or not angelsmods.refining then
   angelsmods.functions.add_resource("update", {
