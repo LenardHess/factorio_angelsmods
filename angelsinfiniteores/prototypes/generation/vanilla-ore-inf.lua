@@ -40,8 +40,8 @@ angelsmods.functions.add_resource("make", {
     --order = "ba", -- try ordering after coal
 
     --resource_index = 0,
-    base_density = 5,--5, -- Vanilla coal: 8
-    regular_rq_factor_multiplier = 0.3,--0.3, -- Vanilla coal: 1.0
+    base_density = 4,--5, -- Vanilla coal: 8
+    regular_rq_factor_multiplier = 1.0,--0.3, -- Vanilla coal: 1.0
     --starting_rq_factor_multiplier = 1.1,
 
     random_spot_size_minimum = 0.25,       -- Default: 0.25

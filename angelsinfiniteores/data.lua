@@ -74,5 +74,9 @@ data.extend({ cp })
 -- local coal_infinite = data.raw["noise-expression"]["default-infinite-coal-patches"]
 -- coal_infinite.expression = coal_normal.expression:gsub("resource_autoplace_all_patches", "resource_autoplace_all_patches_coupled")
 
+-- Fiddle around with the infinite coal
+-- local coal_infinite = data.raw["noise-expression"]["default-infinite-coal-patches"]
+-- coal_infinite.expression = coal_infinite.expression:gsub("resource_autoplace_all_patches", "resource_autoplace_all_patches_coupled")
+
 log(data.raw["noise-expression"]["default-coal-patches"].expression)
 log(data.raw["noise-expression"]["default-infinite-coal-patches"].expression)
