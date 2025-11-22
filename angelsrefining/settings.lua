@@ -89,4 +89,12 @@ data:extend({
     maximum_value = 1000,
     order = "d",
   },
+  { -- This setting is only present to allow other mods to turn off our map gen preset modifications in angels-presets-final-fixes.lua
+    type = "bool-setting",
+    name = "angels-override-map-gen-preset",
+    setting_type = "startup",
+    default_value = true,
+    order = "z",
+    hidden = true,
+  },
 })
